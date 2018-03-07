@@ -10,6 +10,15 @@ import SidebarMinimizer from './../SidebarMinimizer';
 
 class Sidebar extends Component {
 
+  constructor(props) {
+    super(props);
+
+    this.handleClick = this.handleClick.bind(this);
+    this.activeRoute = this.activeRoute.bind(this);
+    this.hideMobile = this.hideMobile.bind(this);
+  }
+
+
   handleClick(e) {
     e.preventDefault();
     e.target.parentElement.classList.toggle('open');
@@ -21,6 +30,12 @@ class Sidebar extends Component {
 
   }
 
+  hideMobile() {
+    if (document.body.classList.contains('sidebar-mobile-show')) {
+      document.body.classList.toggle('sidebar-mobile-show')
+    }
+  }
+
   // todo Sidebar nav secondLevel
   // secondLevelActive(routeName) {
   //   return this.props.location.pathname.indexOf(routeName) > -1 ? "nav nav-second-level collapse in" : "nav nav-second-level collapse";
@@ -30,8 +45,6 @@ class Sidebar extends Component {
   render() {
 
     const props = this.props;
-    const activeRoute = this.activeRoute;
-    const handleClick = this.handleClick;
 
     // badge addon to NavItem
     const badge = (badge) => {
@@ -56,6 +69,22 @@ class Sidebar extends Component {
       return (<li key={key} className={ classes }></li>);
     };
 
+    // nav label with nav link
+    const navLabel = (item, key) => {
+      const classes = {
+        item: classNames( 'hidden-cn', item.class ),
+        link: classNames( 'nav-label', item.class ? item.class : ''),
+        icon: classNames(
+          !item.icon ? 'fa fa-circle' : item.icon ,
+          item.label.variant ? `text-${item.label.variant}` : '',
+          item.label.class ?  item.label.class : ''
+        )
+      };
+      return (
+        navLink(item, key, classes)
+      );
+    };
+
     // nav item with nav link
     const navItem = (item, key) => {
       const classes = {
@@ -78,7 +107,7 @@ class Sidebar extends Component {
               <i className={classes.icon}></i>{item.name}{badge(item.badge)}
             </RsNavLink>
             :
-            <NavLink to={url} className={classes.link} activeClassName="active">
+            <NavLink to={url} className={classes.link} activeClassName="active" onClick={this.hideMobile}>
               <i className={classes.icon}></i>{item.name}{badge(item.badge)}
             </NavLink>
           }
@@ -89,8 +118,8 @@ class Sidebar extends Component {
     // nav dropdown
     const navDropdown = (item, key) => {
       return (
-        <li key={key} className={activeRoute(item.url, props)}>
-          <a className="nav-link nav-dropdown-toggle" href="#" onClick={handleClick.bind(this)}><i className={item.icon}></i>{item.name}</a>
+        <li key={key} className={this.activeRoute(item.url, props)}>
+          <a className="nav-link nav-dropdown-toggle" href="#" onClick={this.handleClick}><i className={item.icon}></i>{item.name}</a>
           <ul className="nav-dropdown-items">
             {navList(item.children)}
           </ul>
@@ -101,6 +130,7 @@ class Sidebar extends Component {
     const navType = (item, idx) =>
       item.title ? title(item, idx) :
       item.divider ? divider(item, idx) :
+      item.label ? navLabel(item, idx) :
       item.children ? navDropdown(item, idx)
                     : navItem(item, idx) ;
 

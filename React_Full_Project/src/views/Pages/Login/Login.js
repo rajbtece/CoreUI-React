@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Container, Row, Col, CardGroup, Card, CardBody, Button, Input, InputGroup, InputGroupAddon} from 'reactstrap';
+import {Container, Row, Col, CardGroup, Card, CardBody, Button, Input, InputGroup, InputGroupAddon, InputGroupText} from 'reactstrap';
 
 
 class Login extends Component {
@@ -15,11 +15,19 @@ class Login extends Component {
                     <h1>Login</h1>
                     <p className="text-muted">Sign In to your account</p>
                     <InputGroup className="mb-3">
-                      <InputGroupAddon><i className="icon-user"></i></InputGroupAddon>
+                      <InputGroupAddon addonType="prepend">
+                        <InputGroupText>
+                          <i className="icon-user"></i>
+                        </InputGroupText>
+                      </InputGroupAddon>
                       <Input type="text" placeholder="Username"/>
                     </InputGroup>
                     <InputGroup className="mb-4">
-                      <InputGroupAddon><i className="icon-lock"></i></InputGroupAddon>
+                      <InputGroupAddon addonType="prepend">
+                        <InputGroupText>
+                          <i className="icon-lock"></i>
+                        </InputGroupText>
+                      </InputGroupAddon>
                       <Input type="password" placeholder="Password"/>
                     </InputGroup>
                     <Row>
